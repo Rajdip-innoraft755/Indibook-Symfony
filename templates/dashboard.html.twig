@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+{% block css %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset("assets/css/dashboard.css") }}">
+{% endblock %}
+{% block js %}
+	{{ parent() }}
+	<script src="{{ asset("assets/js/dashboard.js") }}"></script>
+{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="loader">
+			<img src="/assets/img/loader.gif" alt="">
+		</div>
+		<header>
+			<div class="navbar">
+				<div class="logo">
+					<a href="/dashboard"><img src="/assets/img/logo.png" alt="">
+						<p>INDIBOOK</p>
+					</a>
+				</div>
+				<div class="profile">
+					<h3 id="slide-menu">
+            {{ userInfo.getFName() ~ " " ~ userInfo.getLName() }}
+						<i class="fa-solid fa-bars"></i>
+					</h3>
+					<div class="profile-menu">
+						<ul>
+							<li>
+								<a href="/profile">Update Profile</a>
+							</li>
+							<li>
+								<a href="/logout">Logout</a>
+							</li>
+							<!-- <li><a href="">Delete Account</a></li> -->
+						</ul>
+					</div>
+					<div class="theme" id="theme">
+						<i class="fa-solid fa-circle-half-stroke" id="theme-btn"></i>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="body">
+			<div class="wrapper">
+				<div class="active-user">
+					<h2>Other Users</h2>
+          {% for user in otherUserInfo %}
+						<a href="/user?id={{user.getId()}}">
+							<div class="user">
+								<div class="profile-pic">
+									<img src="{{ user.getProfilePic() }}" alt="">
+								</div>
+								<div class="user-name">
+									<h4>
+										{{ user.getFName()|capitalize ~ " " ~ user.getLName()|capitalize }}
+									</h4>
+								</div>
+							</div>
+						</a>
+          {% endfor %}
+				</div>
+
+				<div
+					class="posts">
+					<!-- user post starts -->
+					<div class="user-post">
+						<form class="post-input" method="POST" action="/makepost" enctype="multipart/form-data">
+							<img id="preview" src="" alt="">
+							<textarea name="postContent" id="postContent" placeholder="whats on your mind"></textarea>
+							<i class="fa-solid fa-camera" id="file-upload-btn"></i>
+							<input type="file" id="file-upload-input" accept="image/*" name="postImage">
+							<button id="postBtn">
+								<i class="fa-solid fa-paper-plane"><input type="submit" value=""></i>
+							</button>
+						</form>
+					</div>
+					<!-- user post ends -->
+
+					<!-- all post view starts-->
+					<section class="all-post">
+						{% for post in allpost %}
+							<div class="post-section">
+								{# {% for i in 0..10 %} #}
+									<div class="post-item">
+										<div class="post-author">
+											<a href="/user?id={{ post.getPostAuthor().getId()}}">
+												<div class="profile-pic">
+													<img src="{{ post.getPostAuthor().getProfilePic() }}" alt="">
+												</div>
+												<div class="user-name">
+													<h4>
+                            {{ post.getPostAuthor().getFName()|capitalize ~ " " ~ post.getPostAuthor().getLName()|capitalize }}
+                          </h4>
+												</div>
+											</a>
+										</div>
+										<div class="post-content">
+											<div class="image">
+												<img src="{{ post.getPostImage() }}" alt="">
+											</div>
+											<div class="text-box">
+												{{ post.getPostContent() }}
+											</div>
+										</div>
+										<div class="post-reaction">
+											<div class="react-icon">
+												<div class="react">
+													<button>
+														<i class="fa-regular fa-heart react"></i>
+													</button>
+												</div>
+												<div class="comment" id="comment">
+													<button>
+														<i class="fa-regular fa-comment comment-btn"></i>
+													</button>
+												</div>
+												<!-- <div class="elfsight-app-4ba0be1a-9dfa-40c8-8854-e06f4d56368f"></div> -->
+												<div class="share">
+													<a target="_blank" href="https://www.twitter.com/share?url=&text={{ post.getPostContent()}}">
+														<i class="fa-brands fa-twitter"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								{# {% endfor %} #}
+								{# <div class="show-more">
+									<input type="button" class="show-btn" id="" value="See more ...">
+								</div> #}
+							</div>
+						{% endfor %}
+					</section>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+{% endblock %}

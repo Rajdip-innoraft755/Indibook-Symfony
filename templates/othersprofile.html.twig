@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block css %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset("assets/css/othersprofile.css") }}">
+{% endblock %}
+{% block js %}
+	{{ parent() }}
+	<script src="{{ asset("assets/js/dashboard.js") }}"></script>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<header>
+			<div class="navbar">
+				<div class="logo">
+					<a href="/dashboard"><img src="/assets/img/logo.png" alt="">
+						<p>INDIBOOK</p>
+					</a>
+				</div>
+				<div class="profile">
+					<h3 id="slide-menu">
+						{{ userInfo.getFName() ~ " " ~ userInfo.getLName() }}
+						<i class="fa-solid fa-bars"></i>
+					</h3>
+					<div class="profile-menu">
+						<ul>
+							<li><a href="/dashboard">Home</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</div>
+					<div class="theme" id="theme">
+						<i class="fa-solid fa-circle-half-stroke" id="theme-btn"></i>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section class="profile">
+			<div class="wrapper">
+				<div class="left">
+					<div class="profile-pic">
+						<img id="preview" src="{{ otherUser.getProfilePic() }}" alt="">
+					</div>
+					<div class="details userid">
+						<i class="fa-solid fa-id-card"></i>
+						<h3>
+							{{otherUser.getUserId()}}
+						</h3>
+					</div>
+					<div class="details name">
+						<i class="fa-solid fa-user"></i>
+						<h3>
+							{{otherUser.getFName()|capitalize ~ " " ~ otherUser.getLName()|capitalize}}
+						</h3>
+					</div>
+					<div class="details email">
+						<i class="fa-solid fa-envelope"></i>
+						<h3>
+							{{otherUser.getEmailId()}}
+						</h3>
+					</div>
+					<div class="details bio">
+						<i class="fa-solid fa-pen"></i>
+						<p>
+							{{otherUser.getBio()}}
+						</p>
+					</div>
+				</div>
+
+				<div class="right">
+					<div class="posts">
+						<section class="all-post">
+							<div class="post-section">
+								{% for post in otherUserPost %}
+									<div class="post-item">
+										<div class="post-author">
+											<a href="/user?id={{post.getPostAuthor().getId()}}">
+												<div>
+													<img src="{{ post.getPostAuthor().getProfilePic() }}" alt="">
+												</div>
+												<div class="user-name">
+													<h4>
+														{{ post.getPostAuthor().getFName()|capitalize ~ " " ~ post.getPostAuthor().getLName()|capitalize }}
+													</h4>
+												</div>
+											</a>
+										</div>
+										<div class="post-content">
+											<div class="image">
+												<img src="{{ post.getPostImage() }}" alt="">
+											</div>
+											<div class="text-box">
+												{{ post.getPostContent() }}
+											</div>
+										</div>
+										<div class="post-reaction">
+											<div class="react-icon">
+												<div class="react">
+													<button>
+														<i class="fa-regular fa-heart react"></i>
+													</button>
+												</div>
+												<div class="comment" id="comment">
+													<button>
+														<i class="fa-regular fa-comment comment-btn"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+							<?php ?>
+						</section>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+{% endblock %}

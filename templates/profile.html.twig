@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+{% block css %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
+{% endblock %}
+{% block js %}
+	{{ parent() }}
+	<script src="{{ asset("assets/js/validate.js")}}"></script>
+	<script src="{{ asset("assets/js/profile.js") }}"></script>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<header>
+			<div class="navbar">
+				<div class="logo">
+					<a href="/dashboard"><img src="/assets/img/logo.png" alt="">
+						<p>INDIBOOK</p>
+					</a>
+				</div>
+				<div class="profile">
+					<h3 id="slide-menu">
+						{{ userInfo.getFName() ~ " " ~ userInfo.getLName() }}
+						<i class="fa-solid fa-bars"></i>
+					</h3>
+					<div class="profile-menu">
+						<ul>
+							<li><a href="/dashboard">Home</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</ul>
+					</div>
+					<div class="theme" id="theme">
+						<i class="fa-solid fa-circle-half-stroke" id="theme-btn"></i>
+					</div>
+				</div>
+			</div>
+		</header>
+		<form action="/profile" method="POST" enctype="multipart/form-data">
+			<section class="profile">
+				<div class="wrapper">
+					<div class="left">
+						<div class="profile-pic">
+							<img id="preview" src="{{ userInfo.getProfilePic() }}" alt="">
+							<i class="fa-solid fa-file-arrow-up" id="file-upload-btn"></i>
+							<input type="file" id="file-upload-input" accept="image/*" name="imgUpload">
+						</div>
+						<div class="bio">
+							<h3 class="tittle">Your Bio ...</h3>
+							<textarea name="bio" rows="2" placeholder="write somthing about you ...">{{ userInfo.getBio() }}</textarea>
+						</div>
+					</div>
+
+					<div class="right">
+						<div class="input-field name">
+							<div class="first-name" id="fName">
+								<h3 class="tittle">First Name</h3>
+								<input type="text" placeholder="your first name" name="fName"
+                {% if app.request.get('fName') %}
+                  value={{ app.request.get('fName') }}
+                {% else %}
+                  value={{ userInfo.getFName() }}
+                {% endif %} required>
+								<span class="error"></span>
+							</div>
+							<div class="last-name" id="lName">
+								<h3 class="tittle">Last Name</h3>
+								<input type="text" placeholder="your last name" name="lName"
+                {% if app.request.get('lName') %}
+                  value={{ app.request.get('lName') }}
+                {% else %}
+                  value={{ userInfo.getLName() }}
+                {% endif %} required>
+								<span class="error"></span>
+							</div>
+						</div>
+
+						<div class="input-field ">
+							<h3 class="tittle">User Id</h3>
+							<input type="text" placeholder="your user Id" name="userId" value={{ userInfo.getUserId() }} disabled>
+						</div>
+
+						<div class="input-field" id="emailId">
+							<h3 class="tittle">Email ID</h3>
+							<input type="text" placeholder="your email Id" name="emailId"
+              {% if app.request.get('emailId') %}
+                value={{ app.request.get('emailId') }}
+              {% else %}
+                value={{ userInfo.getEmailId() }}
+              {% endif %} required>
+							<span class="error"></span>
+						</div>
+
+						<div class="input-field" id="password">
+							<h3 class="tittle">Enter Your Password To Update your Profile</h3>
+							<div class="password-input">
+								<input type="password" placeholder="Password" id="pass" name="password" required>
+									<i id="eye" class="fa-regular fa-eye"></i>
+								</input>
+							</div>
+							<span class="error"></span>
+						</div>
+					</div>
+				</div>
+				<div class="btn">
+					<input type="submit" value="Update Profile" id="submit-btn">
+				</div>
+			</section>
+		</form>
+	</div>
+
+
+{% endblock %}

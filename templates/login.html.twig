@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block css %}
+	<link rel="stylesheet" href="{{ asset("assets/css/homeindex.css") }}">
+{% endblock %}
+{% block js %}
+	{{ parent() }}
+	<script src="{{ asset("assets/js/login.js") }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"
+	integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block sidebar %}
+	{{ parent() }}
+{% endblock %}
+
+{% block body %}
+	<div class="wrapper">
+		<div class="logo">
+			<a href="/dashboard"><img src="/assets/img/logo.png" alt="">
+				<p>INDIBOOK</p>
+			</a>
+		</div>
+
+		<div class="title-text">
+			<div class="title login">USER LOGIN</div>
+		</div>
+		<div class="form-container">
+			<div class="form-inner">
+				<form action="" method="POST" class="login">
+					<div>
+						{% if loginErr is defined %}
+							<span class="error">
+								{{ loginErr }}
+							</span>
+						{% endif %}
+					</div>
+					<div class="field" id="userId">
+						<input type="text" placeholder="User ID" name="userId" required>
+						<span class="error"></span>
+					</div>
+					<div class="field" id="password">
+						<div class="password-input">
+							<input type="password" placeholder="Password" id="pass" name="password" required>
+								<i id="eye" class="fa-regular fa-eye"></i>
+							</input>
+						</div>
+						<span class="error"></span>
+					</div>
+					<div class="pass-link">
+						<a href="/forgotpassword">Forgot password?</a>
+					</div>
+					<div class="field btn">
+						<div class="btn-layer"></div>
+						<input id="login-btn" type="submit" value="Login">
+					</div>
+					<div class="signup-link">Not a member?
+						<a href="/register">Signup now</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="cookie-policy">
+		<div class="cookie-policy-wrap">
+			<p>Allow to store cookie</p>
+			<button class="cookie-button" id="accept-cokkie">Accept</button>
+			<button class="cookie-button" id="decline-cokkie">Decline</button>
+		</div>
+	</div>
+
+{% endblock %}
