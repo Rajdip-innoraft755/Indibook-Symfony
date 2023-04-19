@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>INDIBOOK.COM</title>
+		<link rel="icon" href="{{ asset("assets/img/logo.png") }}">
+		<meta name="theme-color" content="#fa4299">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> {% block css %}{% endblock %}
+
+		{% block js %}
+			<script src="{{ asset("assets/js/jquery.min.js") }}"></script>
+			<script src="{{ asset("assets/js/fontawesome.js") }}"></script>
+			<script src="{{ asset("assets/js/common.js") }}"></script>
+		{% endblock %}
+	</head>
+	<body>
+		{% block sidebar %}
+			<div class="sidebar">
+				<ul>
+					<li class="icon">
+						<a href="/">
+							<i class="fa-solid fa-house"></i>LOGIN</a>
+					</li>
+					<li class="icon">
+						<a href="/register">
+							<i class="fa-solid fa-user-plus"></i>REGISTER</a>
+					</li>
+					<li class="icon" id="theme">
+						<a>
+							<i class="fa-solid fa-circle-half-stroke" id="theme-btn"></i>THEME</a>
+					</li>
+					<li class="icon" id="">
+						<a href="mailto:royrajdip10@gmail.com">
+							<i class="fa-solid fa-phone" id=""></i>Contact Us</a>
+					</li>
+				</ul>
+			</div>
+		{% endblock %}
+		{% block body %}{% endblock %}
+
+	</body>
+</html>

@@ -1,0 +1,14 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+public/assets/js/fontawesome.js
+public/assets/js/jquery.min.js
+/var/
+/vendor/
+img/
+.env
+/src/Services/Secrets.php
+###< symfony/framework-bundle ###
