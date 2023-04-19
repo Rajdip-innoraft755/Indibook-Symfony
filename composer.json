@@ -12,19 +12,20 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "google/apiclient": "^2.0",
+        "laminas/laminas-code": "~4.5.0@dev",
         "phpmailer/phpmailer": "^6.7",
         "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.2.*",
+        "symfony/http-foundation": "6.2.*",
         "symfony/maker-bundle": "^1.48",
         "symfony/runtime": "6.2.*",
         "symfony/twig-bundle": "6.2.*",
         "symfony/yaml": "6.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "laminas/laminas-code" : "~4.5.0@dev"
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {

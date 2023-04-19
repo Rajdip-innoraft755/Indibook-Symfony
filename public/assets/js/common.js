@@ -18,7 +18,8 @@ $(document).ready(function () {
     $(document.body).toggleClass("dark-theme");
     if ($(document.body).attr("class") == "dark-theme") {
       localStorage.setItem("theme", "dark");
-    } else {
+    }
+    else {
       localStorage.setItem("theme", "light");
     }
     $("#theme-btn").toggleClass("fa-rotate-180");

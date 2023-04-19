@@ -5,10 +5,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// Require this file to use the variable which are defined as
-// constant inside this file.
-require '../src/Services/Secrets.php';
-
 /**
  * Mailer class is to send mail to a perticular email through PHPMailer.
  *
@@ -16,6 +12,7 @@ require '../src/Services/Secrets.php';
  */
 class Mailer
 {
+
   /**
    * This sendmail methods accepts the email address, mail subject
    * and mail body as input parameter and send the mail to that user using
@@ -35,20 +32,20 @@ class Mailer
    *     This method is just to send mail returns nothing.
    *
    */
-  public function sendmail(string $address, string $subject, string $body)
+  public function sendMail(string $address, string $subject, string $body)
   {
     $mail = new PHPMailer(true);
     $mail->isSMTP();
-    $mail->Host = MAILHOST;
+    $mail->Host = $_ENV["MAILHOST"];
     $mail->SMTPAuth = true;
-    $mail->Username = MAILUSERNAME;
-    $mail->Password = MAILPASSWORD;
+    $mail->Username = $_ENV["MAILUSERNAME"];
+    $mail->Password = $_ENV["MAILPASSWORD"];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
 
-    $mail->setFrom(MAILUSERNAME, 'info@indibook.com');
+    $mail->setFrom($_ENV["MAILUSERNAME"], 'info@indibook.com');
     $mail->addAddress($address);
-    $mail->addReplyTo(MAILUSERNAME, 'info@indibook.com');
+    $mail->addReplyTo($_ENV["MAILUSERNAME"], 'info@indibook.com');
     $mail->isHTML(true);
     $mail->Subject = $subject;
     $mail->Body = $body;

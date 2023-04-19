@@ -164,7 +164,39 @@ class User
     return $this;
   }
 
-  public function setter($userId, $uniqueId, $fName, $lName, $emailId, $profilePic, $password, $cookie)
+  /**
+   * This method is to set all the user information, user gives at the time of
+   * registration. It basically combine all the setter function to make it easy
+   * for the user to store the details.
+   *
+   *   @param  string $userId
+   *     It is take the user id as input.
+   *
+   *   @param  string $uniqueId
+   *     It is take the unique id as input.
+   *
+   *   @param  string $fName
+   *     It is take the first name as input.
+   *
+   *   @param  string $lName
+   *     It is take the last name as input.
+   *
+   *   @param  string $emailId
+   *     It is take the email id as input.
+   *
+   *   @param  string $profilePic
+   *     It is take the filepath of the profile picture as input.
+   *
+   *   @param  string $password
+   *     It is take the password as input.
+   *
+   *   @param  string $cookie
+   *     It is take the cookie preferrence as input.
+   *
+   *   @return void
+   *     This function just set the information returns nothing.
+   */
+  public function setter(string $userId, string $uniqueId, string $fName, string $lName, string $emailId, string $profilePic, string $password, string $cookie)
   {
     $this->setUserId($userId);
     $this->setUniqueId($uniqueId);

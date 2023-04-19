@@ -1,10 +1,9 @@
 <?php
 namespace App\Services;
 
-use App\Entity\User;
-use App\Services\Mailer;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use App\Services\Mailer;
+use App\Repository\UserRepository;
 
 /**
  * ForgotPassword class is for validate the userId to check whether the
@@ -15,21 +14,6 @@ use Exception;
  */
 class ForgotPassword
 {
-  /**
-   * This is a object of EntityManagerInterface class
-   * It is to manage persistance and retriveal Entity object from Database.
-   *
-   *   @var object
-   */
-  public $em;
-
-  /**
-   * This is a object of EntityRepository class
-   * It is to fetch data from user table of database.
-   *
-   *   @var object
-   */
-  public $userRepo;
 
   /**
    * This is a object of Mailer class, this helps to send mail.
@@ -42,36 +26,32 @@ class ForgotPassword
    * This constructor initializes object of ForgotPassword Class also provides
    * access to EntityManagerInterface object .
    *
-   * @param object $em
-   * It is to manage persistance and retriveal Entity object from Database.
-   *
    * @return void
    * Constructor returns nothing .
    */
-  public function __construct(EntityManagerInterface $em)
+  public function __construct()
   {
-    session_start();
-    $this->em = $em;
     $this->mailer = new Mailer();
-    $this->userRepo = $this->em->getRepository(User::class);
   }
 
   /**
    * This method is used to check whether the user id is valid or not, if
-   * exists then store the email id and the user id as session variable.
+   * exists then store the email id as cookie variable.
    *
    *   @param string $userId
    *     Accepts the user id which is needed to be checked.
    *
+   *   @param UserRepository $em
+   *     Accepts UserRepository object to retrieve the data of user.
+   *
    *   @return string
    *     Returns the message whether the user id valid or invalid.
    */
-  public function checkUser(string $userId): string
+  public function checkUser(UserRepository $userRepo, string $userId): string
   {
-    if ($this->userRepo->findOneBy(array("userId" => $userId)) != NULL) {
-      $user = $this->userRepo->findOneBy(array("userId" => $userId));
-      $_SESSION["emailId"] = $user->getEmailId();
-      $_SESSION["userId"] = $userId;
+    if ($userRepo->findOneBy(array("userId" => $userId))) {
+      $user = $userRepo->findOneBy(array("userId" => $userId));
+      setcookie("emailId", base64_encode($user->getEmailId()),15/1440,"/");
       return "* Valid user ID.";
     }
     return "* Invalid user ID.";
@@ -79,7 +59,7 @@ class ForgotPassword
 
   /**
    * This method is to generate the otp and send the otp to the registered
-   * email id of the user and store the otp in a session variable to match it
+   * email id of the user and store the otp in a cookie variable to match it
    * in future.
    *
    *   @return string
@@ -87,12 +67,13 @@ class ForgotPassword
    */
   public function sendOtp(): string
   {
-    $_SESSION["otp"] = rand(10000, 99999);
-    $address = $_SESSION["emailId"];
-    $body = "Dear User ,<br><br> Here is your OTP. Please , don't share it with Others. <br><br> OTP : " . $_SESSION["otp"];
+    $otp = rand(10000, 99999);
+    $address = base64_decode($_COOKIE["emailId"]);
+    $body = "Dear User ,<br><br> Here is your OTP. Please , don't share it with Others. <br><br> OTP : " . $otp;
     $subject = "OTP TO RESET PASSWORD.";
     try {
-      $this->mailer->sendmail($address, $subject, $body);
+      $this->mailer->sendMail($address, $subject, $body);
+      setcookie("otp", base64_encode($otp),15/1440,"/");
       return "* OTP sent in your registered mail Id successfully";
     }
     catch (Exception $e) {
@@ -102,7 +83,7 @@ class ForgotPassword
 
   /**
    * This is to verify the otp which is entered by the user is correct or not.
-   * If the otp is correct then unset the session variables and send the message
+   * If the otp is correct then unset the cookie variables and send the message
    * whether the otp is correct or not.
    *
    *   @param string $otp
@@ -114,8 +95,9 @@ class ForgotPassword
    */
   public function verifyOtp(string $otp): string
   {
-    if ($otp == $_SESSION["otp"]) {
-      unset($_SESSION);
+    if ($otp == base64_decode($_COOKIE["otp"])) {
+      setcookie("otp","",0,"/");
+      setcookie("emailId","",0,"/");
       return "* correct otp";
     }
     return "* incorrect otp";

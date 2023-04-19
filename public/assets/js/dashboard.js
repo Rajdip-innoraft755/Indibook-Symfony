@@ -3,10 +3,9 @@
  */
 $(document).ready(function () {
   /**
-   * It is to show the loader for first 2000ms when the dashboard
-   * page is loading.
+   * It is to show the loader while the dashboard page is loading.
    */
-  $(".loader").fadeOut(2000);
+  $(".loader").fadeOut();
 
   /**
    * It is to change the react icon style when it is clicked.
@@ -16,7 +15,7 @@ $(document).ready(function () {
   });
 
   /**
-   * It is to change the react icon style when it is clicked.
+   * It is to change the comment icon style when it is clicked.
    */
   $(".comment-btn").click(function () {
     $(this).toggleClass("fa-regular fa-solid");

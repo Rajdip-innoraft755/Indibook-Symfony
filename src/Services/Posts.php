@@ -9,6 +9,7 @@ namespace App\Services;
  */
 class Posts
 {
+
   /**
    * This is to store the post id of a perticular post which stores
    * the some informations about the post i.e post author's user id

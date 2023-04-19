@@ -6,21 +6,26 @@ $(document).ready(function () {
   $("#send-otp").attr("disabled", true);
 
   /**
+   *   @var userId
+   *     This is to store the userId input by user.
+   */
+  var userId;
+
+  /**
    * It is to check whether the user id is valid or not using ajax based
    * on the result it activate the send otp button.
    */
   $("#userId-input").keyup(function () {
-    var userid = $(this).val();
-    if (userid.length != 0) {
+    userId = $(this).val();
+    if (userId.length) {
       $.ajax({
         url: "/forgotpassword/checkuserid",
         method: "POST",
-        data: { userId: userid },
+        data: { userId: userId },
         datatype: "text",
         success: function (data) {
           var isValidUser = jQuery.parseJSON(data)["isValidUser"];
           $("#userId>.error").html(isValidUser);
-          console.log($("#userId>.error").html());
           if (isValidUser == "* Valid user ID.") {
             $("#send-otp").attr("disabled", false);
           }
@@ -38,7 +43,7 @@ $(document).ready(function () {
     $.ajax({
       url: "/forgotpassword/sendotp",
       method: "POST",
-      data: { userId: userid },
+      data: { userId: userId },
       datatype: "text",
       beforeSend: function () {
         $(".loader").show();
@@ -93,7 +98,7 @@ $(document).ready(function () {
       $.ajax({
         url: "/forgotpassword/reset",
         method: "POST",
-        data: { userid: userid, password: $("#pass").val() },
+        data: { userid: userId, password: $("#pass").val() },
         datatype: "text",
         beforeSend: function () {
           $(".loader").show();

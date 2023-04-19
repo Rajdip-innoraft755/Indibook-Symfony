@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class DashboardController extends AbstractController
 {
+
   /**
    * This is a object of EntityManagerInterface class
    * It is to manage persistance and retriveal Entity object from Database.
@@ -105,12 +106,9 @@ class DashboardController extends AbstractController
    * users and the information of user,who logged in currently.Basically it
    * takes the user to the dashboard page after login succesfully.
    *
-   * @Route("/dashboard", name = "dashboard")
-   *  It takes the user to the dashboard page after login succesfully and it
-   *  redirects to login page if user try to reach this page without login.
-   *
-   *   @param object $rq
-   *     This Request object is to handles the user credentials.
+   *   @Route("/dashboard", name = "dashboard")
+   *     It takes the user to the dashboard page after login succesfully and it
+   *     redirects to login page if user try to reach this page without login.
    *
    *   @return Response
    *     Based on the validation the response is to either dashboard page or
@@ -132,9 +130,9 @@ class DashboardController extends AbstractController
    * This method used when user try add a new post, it stores the post data
    * in database and redirects to dashboard with loading the new post.
    *
-   * @Route("/makepost", name = "makepost")
-   *  This route does not take user to a new page it redirects user to the
-   *  dashboard after store the new post data.
+   *   @Route("/makepost", name = "makepost")
+   *     This route does not take user to a new page it redirects user to the
+   *     dashboard after store the new post data.
    *
    *   @param object $rq
    *     This Request object is to handles the post data.
@@ -144,15 +142,14 @@ class DashboardController extends AbstractController
    */
   public function makePost(Request $rq): Response
   {
-    echo $this->userId;
-    if ($rq != NULL ) {
+    if ($rq) {
       $this->post->setPostId($this->postService->generatePostId($this->userId));
       $this->post->setPostContent($rq->request->get("postContent"));
       $image = $rq->files->get("postImage");
-      if ($image != NULL) {
+      if ($image) {
         $this->post->setPostImage($this->postService->postImgStoring($image));
       }
-      $this->user = $this->em->getRepository(User::class)->findOneBy([
+      $this->user = $this->userRepo->findOneBy([
         "userId" => $this->userId,
       ]);
       $this->post->setPostAuthor($this->user);
@@ -167,9 +164,9 @@ class DashboardController extends AbstractController
    * This method is to fetch the posts and details of the perticular user whose
    * profile the current user want to visit.
    *
-   * @Route("/user", name = "othersprofile")
-   *  This route is to take user to the others user profile page after
-   *  fetching all the related data.
+   *   @Route("/user", name = "othersprofile")
+   *     This route is to take user to the others user profile page after
+   *     fetching all the related data.
    *
    *   @param object $rq
    *     This Request object is to take the user id of the user whose
@@ -180,10 +177,11 @@ class DashboardController extends AbstractController
    */
   public function user(Request $rq): Response
   {
+    $id = $rq->query->get("id");
     $otherUser = $this->userRepo->findOneBy([
-      "id" => $rq->query->get("id"),
+      "id" => $id,
     ]);
-    $otherUserPost = $this->postRepo->findAllByPostAuthor($rq->query->get("id"));
+    $otherUserPost = $this->postRepo->findAllByPostAuthor($id);
     $user = $this->userRepo->findOneBy([
       "userId" => $this->userId,
     ]);
@@ -198,10 +196,12 @@ class DashboardController extends AbstractController
    * This method is to show the user profile page and made the changes in
    * database if user updates any information about himself.
    *
-   * @Route("/profile", name = "profile")
+   *   @Route("/profile", name = "profile")
+   *     This route take user to the page where he/she can see and edit his/her
+   *     details.
    *
-   *    @param object $rq
-   *     This Request object is to take the updated user information data .
+   *   @param object $rq
+   *    This Request object is to take the updated user information data .
    *
    *   @return Response
    *     Takes user to the user profile page.
@@ -218,7 +218,7 @@ class DashboardController extends AbstractController
       $user->setBio($rq->request->get('bio'));
       if($rq->files->get("imgUpload") != NULL){
         $registration = new Registration($this->em);
-        $user->setProfilePic($registration->imgStoring($rq->files->get("imgUpload"),$this->userId));
+        $user->setProfilePic($registration->imgStoring($rq->files->get("imgUpload"), $this->userId));
       }
       $this->em->persist($user);
       $this->em->flush();

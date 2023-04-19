@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class Registration
 {
+
   /**
    * This is a object of EntityManagerInterface class
    * It is to manage persistance and retriveal Entity object from Database.
@@ -59,23 +60,30 @@ class Registration
   {
     //Initialize error array
     $error = [];
+
     // Checks whether the first name contains only alphabet or not .
     // If first name contains other than alphabets then store the error .
     if (!(preg_match("/^[a-zA-Z ]*$/", $data["fName"]))) {
       $error["fName"] = "* first name only contains alphabet.";
     }
+
     // Checks whether the last name contains only alphabet or not .
     // If last name contains other than alphabets then store the error .
     if (!(preg_match("/^[a-zA-Z ]*$/", $data["lName"]))) {
       $error["lName"] = "* last name only contains alphabet.";
     }
+
     // Checks whether the email id is in valid format or not .
     // If email id is not in valid format then store the error .
     if (!(preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $data["emailId"]))) {
       $error["emailId"] = "* not a valid email.";
     }
+
     // If the user id is not free then store the error.
-    $error["userId"] = $this->availableUserId($data["userId"]);
+    if(!empty($this->availableUserId($data["userId"]))){
+      $error["userId"] = $this->availableUserId($data["userId"]);
+    }
+
     // Checks whether the password follows the following checkpoints or not more
     // than 8 characters atleast one uppercase and one lowercase and one digit
     // and one special characters(@, $, #, !, %, *, ?, &).
@@ -90,10 +98,10 @@ class Registration
    *  This method is used to store the user profile picture in local storage.
    *  And returns the filepath to store that in database.
    *
-   *   @param mixed $image
+   *   @param object $image
    *     Accepts the HTTPFoundation files object based on image file input
    *
-   *   @param string $userId
+   *   @param mixed $userId
    *     Accepts the user id of perticular user.
    *
    *   @return string
@@ -101,7 +109,7 @@ class Registration
    */
   public function imgStoring(mixed $image, string $userId)
   {
-    if ($image != NULL) {
+    if ($image) {
       $targetFile = $userId . "-profile-pic-" . $image->getClientOriginalName();
       $image->move("assets/img/", $targetFile);
       return "/assets/img/" . $targetFile;
@@ -136,7 +144,7 @@ class Registration
    */
   public function availableUserId(string $userId): string
   {
-    if ($this->userRepo->findBy(array("userId" => $userId)) != NULL) {
+    if ($this->userRepo->findBy(array("userId" => $userId))) {
       return "* UserId already exists.";
     }
     return "";
